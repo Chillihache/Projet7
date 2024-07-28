@@ -7,6 +7,5 @@ def clean_data(data):
             if action["price"] > 0 and action["profit"] > 0:
                 cleaned_data.append(action)
         except (ValueError, TypeError):
-            # Ignorer les entrées qui ne peuvent pas être converties en float
             continue
     return cleaned_data
