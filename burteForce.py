@@ -1,4 +1,5 @@
 import csv
+from itertools import combinations
 
 
 class Action:
@@ -14,8 +15,9 @@ class ActionManager:
         self.data = data
         self.max_budget = 0
         self.actions = []
+        self.valid_combinations = []
         self.best_profit = 0
-        self.best_combination = []
+        self.best_combination = ()
         self.best_combination_cost = 0
 
     def create_actions_list(self):
@@ -28,7 +30,7 @@ class ActionManager:
         print("")
         while True:
             try:
-                self.max_budget = round(float(input("Votre budget maximum : ")))
+                self.max_budget = float(input("Votre budget maximum : "))
                 if self.max_budget > 0:
                     return
                 else:
@@ -36,25 +38,18 @@ class ActionManager:
             except ValueError:
                 print("Veuillez entrer un nombre.")
 
-    def knapsack(self):
-
-        dp = [[0] * (int(self.max_budget + 1)) for _ in range(len(self.actions) + 1)]
-
+    def find_valid_combinations(self):
         for i in range(1, len(self.actions) + 1):
-            action = self.actions[i - 1]
-            for j in range(int(self.max_budget + 1)):
-                if action.cost <= j:
-                    dp[i][j] = max(dp[i - 1][j], dp[i - 1][round(j - action.cost)] + action.profit)
-                else:
-                    dp[i][j] = dp[i - 1][j]
+            for combination in combinations(self.actions, i):
+                if sum(action.cost for action in combination) <= self.max_budget:
+                    self.valid_combinations.append(combination)
 
-        for i in range(len(self.actions), 0, -1):
-            if dp[i][int(self.max_budget)] != dp[i - 1][int(self.max_budget)]:
-                self.best_combination.append(self.actions[i - 1])
-                self.best_profit += self.actions[i - 1].profit
-                self.max_budget -= self.actions[i - 1].cost
-
-        self.best_combination.reverse()
+    def find_best_combination(self):
+        for combination in self.valid_combinations:
+            profit = sum(action.profit for action in combination)
+            if profit > self.best_profit:
+                self.best_profit = profit
+                self.best_combination = combination
 
     def calculate_best_combination_cost(self):
         self.best_combination_cost = sum(action.cost for action in self.best_combination)
@@ -66,7 +61,7 @@ class ActionManager:
         for action in self.best_combination:
             print(action.name)
         print("")
-        print(f"Le cout total de ces actions est de : {round(self.best_combination_cost, 2)} euros")
+        print(f"Le cout total de ces actions est de : {self.best_combination_cost} euros")
         print(f"Le profit en deux ans sera de environ : {round(self.best_profit, 2)} euros")
 
 
@@ -92,11 +87,12 @@ def clean_data(data):
 
 if __name__ == "__main__":
 
-    data = csv_reader("datas/dataset1_Python+P7.csv")
+    data = csv_reader("datas/limited_data.csv")
     data = clean_data(data)
     action_manager = ActionManager(data)
     action_manager.create_actions_list()
     action_manager.ask_budget()
-    action_manager.knapsack()
+    action_manager.find_valid_combinations()
+    action_manager.find_best_combination()
     action_manager.calculate_best_combination_cost()
     action_manager.show_best_combination()
