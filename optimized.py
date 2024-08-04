@@ -37,7 +37,6 @@ class ActionManager:
                 print("Veuillez entrer un nombre.")
 
     def knapsack(self):
-
         dp = [[0] * (int(self.max_budget + 1)) for _ in range(len(self.actions) + 1)]
 
         for i in range(1, len(self.actions) + 1):
@@ -55,8 +54,6 @@ class ActionManager:
                 self.max_budget -= self.actions[i - 1].cost
 
         self.best_combination.reverse()
-
-    def calculate_best_combination_cost(self):
         self.best_combination_cost = sum(action.cost for action in self.best_combination)
 
     def show_best_combination(self):
@@ -92,11 +89,10 @@ def clean_data(data):
 
 if __name__ == "__main__":
 
-    data = csv_reader("datas/dataset1_Python+P7.csv")
+    data = csv_reader("datas/dataset2_Python+P7.csv")
     data = clean_data(data)
     action_manager = ActionManager(data)
     action_manager.create_actions_list()
     action_manager.ask_budget()
     action_manager.knapsack()
-    action_manager.calculate_best_combination_cost()
     action_manager.show_best_combination()

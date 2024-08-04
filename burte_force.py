@@ -50,9 +50,7 @@ class ActionManager:
             if profit > self.best_profit:
                 self.best_profit = profit
                 self.best_combination = combination
-
-    def calculate_best_combination_cost(self):
-        self.best_combination_cost = sum(action.cost for action in self.best_combination)
+                self.best_combination_cost = sum(action.cost for action in self.best_combination)
 
     def show_best_combination(self):
         print("")
@@ -94,5 +92,4 @@ if __name__ == "__main__":
     action_manager.ask_budget()
     action_manager.find_valid_combinations()
     action_manager.find_best_combination()
-    action_manager.calculate_best_combination_cost()
     action_manager.show_best_combination()
