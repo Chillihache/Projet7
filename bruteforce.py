@@ -85,11 +85,16 @@ def clean_data(data):
 
 if __name__ == "__main__":
 
-    data = csv_reader("datas/limited_data.csv")
-    data = clean_data(data)
-    action_manager = ActionManager(data)
-    action_manager.create_actions_list()
-    action_manager.ask_budget()
-    action_manager.find_valid_combinations()
-    action_manager.find_best_combination()
-    action_manager.show_best_combination()
+    #N'oubliez pas d'entrer le chemin d'accès au fichier CSV
+    try:
+        data = csv_reader("")
+        data = clean_data(data)
+        action_manager = ActionManager(data)
+        action_manager.create_actions_list()
+        action_manager.ask_budget()
+        action_manager.find_valid_combinations()
+        action_manager.find_best_combination()
+        action_manager.show_best_combination()
+    except FileNotFoundError:
+        print("Le fichier CSV n'a pas été trouvé.")
+
