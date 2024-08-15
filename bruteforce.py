@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
     #N'oubliez pas d'entrer le chemin d'accès au fichier CSV
     try:
-        data = csv_reader("")
+        data = csv_reader("datas/limited_data.csv")
         data = clean_data(data)
         action_manager = ActionManager(data)
         action_manager.create_actions_list()
